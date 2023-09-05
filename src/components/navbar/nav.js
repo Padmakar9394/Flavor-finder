@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import {GiHamburgerMenu} from "react-icons/gi";
 import {RxCross2} from "react-icons/rx";
-import {BsFillBookmarkHeartFill} from "react-icons/bs";
+import {BsBookmarkHeart} from "react-icons/bs";
+
+import { useGlobalContext } from '../../context';
 
 const Nav = () => {
 
@@ -38,17 +40,19 @@ const Nav = () => {
   }
 
   const NavLg = () => {
-    const [count, setCount] = useState(0);
+    const {favorites, toggleShowFavorite} = useGlobalContext();
     return(
-        <div className='drop-shadow'>
-          <div className='mt-6 flex items-center justify-between mx-4 text-3xl'>
+        <div className='bg-[#fff] drop-shadow'>
+          <div className='py-3 flex items-center justify-between mx-6 text-3xl'>
             <h3 className="text-[#0F172A] px-4 py-2">FlavorFinder</h3>
-            <div>
-              <BsFillBookmarkHeartFill className='' />
-              <p className='text-sm text-center absolute top-0 right-2 h-5 w-5 bg-[#b4d3fe] rounded-full'>{count}</p>
-            </div>
+            <button className='relative' onClick={toggleShowFavorite}>
+            <BsBookmarkHeart />
+              <div>
+                <p className='absolute text-sm text-center top-[-16px] right-[-8px] h-5 w-5 bg-[#b4d3fe] rounded-full'>{favorites.length}</p>
+              </div>
+            </button>
           </div>
-          <div className='my-4 mx-24 flex items-center'>
+          <div className='py-4 mx-24 flex items-center'>
             <form>
               <input type='text' className='px-2 py-1 bg-[#f1f5f9]' placeholder='search a meal'/>
               <button className='mx-3 rounded-md bg-[#03449d] hover:bg-[#034caf] px-3 py-1 text-white'>Search</button>

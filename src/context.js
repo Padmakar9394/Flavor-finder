@@ -23,9 +23,8 @@ const AppProvider = ({ children }) => {
         try {
               const response = await fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=");
           const data = await response.json();
-          //   console.log(data);
               if(data.meals) {
-                  console.log(data.meals);
+                //   console.log(data.meals);
                   setMeals(data.meals)
               }
               else {
@@ -41,16 +40,14 @@ const AppProvider = ({ children }) => {
         fetchMeals();
       }, []);
 
-    const selectMeal = ( { idMeal, favoriteMeal} ) => {
+      const selectMeal = (idMeal,favoriteMeal) => {
         let meal;
-
         if(favoriteMeal) {
-            meal = favorites.find(m => m.idMeal === idMeal);
+            meal = favorites.find(meal => meal.idMeal === idMeal);
+        }else {
+            meal = meals.find(meal => meal.idMeal === idMeal);
         }
-        else {
-            meal = meals.find(m => m.idMeal === idMeal);
-        }
-
+        
         setSelectedMeal(meal);
         setShowModal(true);
     }
@@ -59,13 +56,34 @@ const AppProvider = ({ children }) => {
         setShowModal(false);
     }
 
+    const addToFavorites = (idMeal) => {
+        const alreadyFavorite = favorites.find((meal) => meal.idMeal === idMeal);
+        if(alreadyFavorite) {
+            removeFromFavorites(idMeal)
+        }else {
+            // add to favorites
+        const meal = meals.find((meal) => meal.idMeal === idMeal);
+        const updatedFavorites = [...favorites, meal];
+        setFavorites(updatedFavorites);
+        localStorage.setItem('favorites',JSON.stringify(updatedFavorites));
+        }
+        
+    }
+
+    const removeFromFavorites = (idMeal) => {
+        const updatedFavorites = favorites.filter(meal => meal.idMeal !== idMeal);
+        setFavorites(updatedFavorites);
+        localStorage.setItem('favorites',JSON.stringify(updatedFavorites));
+    }
+
     const toggleShowFavorite = () => {
-        setShowFavorite(pre=>!pre);
+        console.log("oops");
+        setShowFavorite(pre => !pre);
     }
 
     return (
         <AppContext.Provider 
-            value={{ meals, selectMeal, closeModal, toggleShowFavorite, showModal, selectedMeal, favorites, showFavorite, setMeals, setShowModal, setSelectedMeal, setFavorites,setShowFavorite }}>
+            value={{ meals, selectMeal, closeModal, toggleShowFavorite, showModal, selectedMeal, favorites, addToFavorites, removeFromFavorites, showFavorite, setMeals, setShowModal, setSelectedMeal, setFavorites }}>
                 {children}
         </AppContext.Provider>
        
