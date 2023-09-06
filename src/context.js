@@ -77,7 +77,7 @@ const AppProvider = ({ children }) => {
     }
 
     const toggleShowFavorite = () => {
-        console.log("oops");
+        // console.log("oops");
         setShowFavorite(pre => !pre);
     }
 

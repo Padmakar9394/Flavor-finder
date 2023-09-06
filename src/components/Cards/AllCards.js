@@ -28,7 +28,7 @@ const AllCards = () => {
   
     return (
       <>
-        <ul className='mt-20 mx-24 flex flex-wrap gap-6 justify-center items-center'>{renderCards()}</ul>
+        <ul className='py-4 lg:mt-20 lg:mx-24 flex flex-wrap gap-6 justify-center items-center'>{renderCards()}</ul>
       </>
     )
 };

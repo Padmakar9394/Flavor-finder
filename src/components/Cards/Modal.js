@@ -9,7 +9,7 @@ const Modal = () => {
   return (
     <>
         <div className='fixed grid items-center justify-center z-100  top-0 left-0 bg-[#000000d9] w-screen h-screen'>
-            <div className='w-[60vw] h-[80vh] overflow-scroll bg-white rounded-md'>
+            <div className='w-[80vw] h-[80vh] lg:w-[60vw] lg:h-[80vh] overflow-scroll bg-white rounded-md'>
               <img src={image} alt={title} className='w-full h-64 object-cover rounded-t-md' />
               <div className='flex flex-col items-start px-6'>
                 <h3 className='text-3xl my-4'>{title}</h3>
