@@ -1,5 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 
+const allMealsURL = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
+const randomMealURL = 'https://www.themealdb.com/api/json/v1/1/random.php';
+
 const AppContext = React.createContext()
 
 const getFavoritesFromLocalStorage = () => {
@@ -14,31 +17,47 @@ const getFavoritesFromLocalStorage = () => {
 
 const AppProvider = ({ children }) => {
     const [meals, setMeals] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedMeal,setSelectedMeal] = useState(null);
     const [favorites, setFavorites] = useState(getFavoritesFromLocalStorage());
     const [showFavorite, setShowFavorite] = useState(false);
 
-    const fetchMeals = async () => {
+    const fetchMeals = async (url) => {
+        setLoading(true);
         try {
-              const response = await fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=");
-          const data = await response.json();
+              const response = await fetch(url);
+              const data = await response.json();
               if(data.meals) {
                 //   console.log(data.meals);
-                  setMeals(data.meals)
+                  setMeals(data.meals);
               }
               else {
                   setMeals([])
               }
+              setLoading(false);
           }
           catch(err) {
               console.log(err);
+              setLoading(false);
           }
     }
 
     useEffect(() => { 
-        fetchMeals();
+        fetchMeals(allMealsURL);
       }, []);
+
+
+    //fetch all meals data on search
+    useEffect(() => {
+        if(!searchTerm) return
+        fetchMeals(`${allMealsURL}${searchTerm}`)
+    },[searchTerm])
+
+      const fetchRandomMeal = () => {
+        fetchMeals(randomMealURL);
+      }
 
       const selectMeal = (idMeal,favoriteMeal) => {
         let meal;
@@ -83,7 +102,7 @@ const AppProvider = ({ children }) => {
 
     return (
         <AppContext.Provider 
-            value={{ meals, selectMeal, closeModal, toggleShowFavorite, showModal, selectedMeal, favorites, addToFavorites, removeFromFavorites, showFavorite, setMeals, setShowModal, setSelectedMeal, setFavorites }}>
+            value={{ loading, meals, selectMeal, fetchRandomMeal, closeModal, toggleShowFavorite, showModal, selectedMeal, favorites, addToFavorites, removeFromFavorites, showFavorite, setMeals, setShowModal, setSelectedMeal, setFavorites, setSearchTerm }}>
                 {children}
         </AppContext.Provider>
        

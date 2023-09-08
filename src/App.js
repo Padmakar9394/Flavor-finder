@@ -5,11 +5,13 @@ import AllCards from "./components/Cards/AllCards"
 import Modal from './components/Cards/Modal';
 import Favorites from './components/Favorites/Favorites';
 import { useGlobalContext } from './context';
+import Loading from './components/Loader/loading';
 
-function App() {
-  const {showModal, favorites, showFavorite} = useGlobalContext();
-  return (
-    <div>
+
+const Par = () => {
+  const { showModal, favorites, showFavorite} = useGlobalContext();
+  return(
+    <>
       <header className='fixed w-screen'>
         <Nav />
         {showFavorite && favorites.length > 0 && <Favorites />}
@@ -19,6 +21,18 @@ function App() {
         <AllCards />
         { showModal && <Modal /> }
       </div>
+    
+    </>
+  )
+}
+
+function App() {
+  const {loading} = useGlobalContext();
+  return (
+    <div>
+      {
+        loading ? <Loading /> :  <Par />
+      }
       
     </div>
   );
